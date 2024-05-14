@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.trash
+# output*/
+model_zoo
+pyrightconfig.json

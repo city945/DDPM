@@ -1,9 +1,14 @@
 from Diffusion.Train import train, eval
 
+state = "train"
+test_load_weight = None
+
+state = "eval"
+test_load_weight = "model_zoo/download/DiffusionWeight.pt"
 
 def main(model_config = None):
     modelConfig = {
-        "state": "train", # or eval
+        "state": state,
         "epoch": 200,
         "batch_size": 80,
         "T": 1000,
@@ -20,15 +25,18 @@ def main(model_config = None):
         "grad_clip": 1.,
         "device": "cuda:0", ### MAKE SURE YOU HAVE A GPU !!!
         "training_load_weight": None,
-        "save_weight_dir": "./Checkpoints/",
-        "test_load_weight": "ckpt_199_.pt",
-        "sampled_dir": "./SampledImgs/",
+        "save_weight_dir": "./output/DDPM",
+        "test_load_weight": test_load_weight,
+        "sampled_dir": "./output/DDPM/SampledImgs/",
         "sampledNoisyImgName": "NoisyNoGuidenceImgs.png",
         "sampledImgName": "SampledNoGuidenceImgs.png",
         "nrow": 8
         }
     if model_config is not None:
         modelConfig = model_config
+    from pathlib import Path
+    Path(modelConfig["save_weight_dir"]).mkdir(exist_ok=True)
+    Path(modelConfig["sampled_dir"]).mkdir(exist_ok=True)
     if modelConfig["state"] == "train":
         train(modelConfig)
     else:

@@ -19,7 +19,7 @@ def train(modelConfig: Dict):
     device = torch.device(modelConfig["device"])
     # dataset
     dataset = CIFAR10(
-        root='./CIFAR10', train=True, download=True,
+        root='/datasets/CIFAR10', train=True, download=True,
         transform=transforms.Compose([
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
@@ -72,8 +72,7 @@ def eval(modelConfig: Dict):
         device = torch.device(modelConfig["device"])
         model = UNet(T=modelConfig["T"], ch=modelConfig["channel"], ch_mult=modelConfig["channel_mult"], attn=modelConfig["attn"],
                      num_res_blocks=modelConfig["num_res_blocks"], dropout=0.)
-        ckpt = torch.load(os.path.join(
-            modelConfig["save_weight_dir"], modelConfig["test_load_weight"]), map_location=device)
+        ckpt = torch.load(modelConfig["test_load_weight"], map_location=device)
         model.load_state_dict(ckpt)
         print("model load weight done.")
         model.eval()
